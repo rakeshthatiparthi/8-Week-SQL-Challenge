@@ -126,3 +126,76 @@ JOIN menu m
 --  B           | sushi        |    2
 --  B           | ramen        |    2 
 --  C           | ramen        |    3
+
+
+ -- 6. Which item was purchased first by the customer after they became a member?
+ 
+ WITH cte as(SELECT
+	me.customer_id,
+    me.join_date,
+    s.order_date,
+    m.product_name,
+    RANK() OVER (PARTITION BY me.customer_id order by s.order_date) as rankings
+ FROM members me
+ JOIN sales s
+	ON me.customer_id = s.customer_id
+ JOIN menu m
+	ON s.product_id = m.product_id
+    WHERE s.order_date >= me.join_date)
+    SELECT customer_id,product_name FROM cte where rankings =1 ;
+    
+-- Output
+
+--  customer_id | product_name 
+-- -------------+--------------
+--  A           | curry
+--  B           | sushi    
+
+
+
+ -- 7. Which item was purchased just before the customer became a member?
+ 
+ WITH cte as(SELECT
+	me.customer_id,
+    me.join_date,
+    s.order_date,
+    m.product_name,
+    RANK() OVER (PARTITION BY me.customer_id order by s.order_date desc) as rankings
+ FROM members me
+ JOIN sales s
+	ON me.customer_id = s.customer_id
+ JOIN menu m
+	ON s.product_id = m.product_id
+    WHERE s.order_date < me.join_date)
+    SELECT customer_id,product_name FROM cte where rankings =1 ;
+    
+    
+-- Output
+
+--  customer_id | product_name 
+-- -------------+--------------
+--  A           | sushi
+--  A           | curry
+--  B           | sushi
+
+
+ -- 8 What is the total items and amount spent for each member before they became a member?
+ 
+ SELECT
+ 	me.customer_id,
+	COUNT(m.product_id) as total_items,
+	SUM(m.price) as amount_spent
+FROM members me
+JOIN sales s
+	ON me.customer_id = s.customer_id 
+JOIN menu m
+	ON s.product_id = m.product_id
+WHERE s.order_date < me.join_date
+        GROUP BY me.customer_id;
+	
+-- Output
+
+--  customer_id | total_items | amount_spent
+-- -------------+-------------+-------------
+--  A           |           2 |     25
+--  B           |           3 |     40
