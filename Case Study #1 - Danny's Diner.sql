@@ -4,39 +4,38 @@
 
 -- 1. What is the total amount each customer spent at the restaurant?
 
-SELECT 
-    s.customer_id,
-    SUM(m.price) AS Total_spent
+SELECT
+	s.customer_id,
+	SUM(m.price) AS Total_spent
 FROM sales s
-JOIN menu m 
-  ON s.product_id = m.product_id
+JOIN menu m
+	ON s.product_id = m.product_id
 GROUP BY s.customer_id;
 
 -- Output
 
---  customer_id | Toat_Spent 
+--  customer_id | Total_Spent 
 -- -------------+--------------
+--  A           |           76
 --  B           |           74
 --  C           |           36
---  A           |           76
 
 
 -- 2 . How many days has each customer visited the restaurant?
 
 SELECT
-  customer_id,
-  COUNT(DISTINCT(order_date)) as no_of_days_visited
+	customer_id,
+	COUNT(DISTINCT(order_date)) as no_of_days_visited
 FROM sales
 GROUP BY customer_id;
 
 -- Output
 
 --  customer_id | no_of_days_visited 
--- -------------+--------------
+-- -------------+--------------------
 --  A           |            4
 --  B           |            6
 --  C           |            2
-
 
 
 
@@ -44,6 +43,7 @@ GROUP BY customer_id;
 
 with cte AS (
 SELECT
+	
 	s.customer_id,
 	m.product_name,
 	RANK() OVER(PARTITION BY s.customer_id ORDER BY s.order_date) AS ranking
@@ -97,25 +97,26 @@ GROUP BY s.customer_id;
 
 -- 5. Which item was the most popular for each customer?
 
-with cte2 as (WITH cte AS (SELECT
-	s.customer_id,
-    m.product_name,
-    count(m.product_name) as popular_item_count
-FROM sales s
-JOIN menu m 
-	ON s.product_id = m.product_id
-    GROUP BY s.customer_id,m.product_name)
+with cte2 as (WITH cte AS (
+	SELECT
+		s.customer_id,
+    		m.product_name,
+    		count(m.product_name) as popular_item_count
+	FROM sales s
+	JOIN menu m 
+		ON s.product_id = m.product_id
+    	GROUP BY s.customer_id,m.product_name)
     SELECT 
     customer_id,
     product_name,
     popular_item_count,
-    DENSE_RANK() OVER (PARTITION BY customer_id order by popular_item_count DESC) as rankings
+    DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY popular_item_count DESC) as rankings
     FROM cte)
-    select 
-		customer_id,
+    SELECT
+    	customer_id,
         product_name,
         popular_item_count
-    from cte2 where rankings =1;
+    FROM cte2 WHERE rankings =1;
 
 -- Output
 
