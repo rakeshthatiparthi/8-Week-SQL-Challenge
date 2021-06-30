@@ -1,2 +1,2 @@
 # 8-Week-SQL-Challenge
-https://8weeksqlchallenge.com/
+Checkout the full details of 8Week SQL Challenge here :https://8weeksqlchallenge.com/
