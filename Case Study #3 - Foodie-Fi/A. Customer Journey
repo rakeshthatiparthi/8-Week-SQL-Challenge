@@ -1,0 +1,12 @@
+ Based off the 8 sample customers provided in the sample from the subscriptions table, write a brief description about each customer’s onboarding journey.
+
+-- Each customer used the 7 day trial plan proir to upgrade or cancel the subscription. 
+-- Need to attract the customer in initial 7 days to encouarge them to continue using the foodie-fi service.
+-- customer_id 1 took basic monthly plan after 7 day trial.
+-- customer_id 2 took the pro annual plan after 7 day trial.
+-- customer_id 11 cancelled the subscription after 7 day trial plan.
+-- customer_id 13 used the basic monthly plan for 3 months then upgraded to pro monthly plan.
+-- customer_id 15 used pro monthly plan for 1 month then cancelled the subscription.
+-- customer_id 16 used the monthly basic plan for 4 months then upgraded to pro annual plan.
+-- customer_id 18 took the pro monthly plan after 7 day trial.
+-- customer_id 19 used the pro monthly plan for 2 months then upgraded to pro annual plan.
